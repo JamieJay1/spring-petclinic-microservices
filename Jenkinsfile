@@ -1,21 +1,19 @@
 pipeline {
     agent any
     tools {
-        jdk 'JDK_17'          
-        maven 'Maven-3.9.9'    // Already configured
+        jdk 'JDK_17'           
+        maven 'Maven-3.9.9'    
     }
     stages {
         stage('Checkout') {
             steps {
-                
-                git branch: 'master', url: 'https://github.com/JamieJay1/docker-spring-boot-java-web-service.git'
+                git url: 'https://github.com/JamieJay1/docker-spring-boot-java-web-service.git', branch: 'master'
             }
         }
         stage('Build') {
             steps {
-                
-                bat 'echo %JAVA_HOME%'        // Correct Windows-style variable
-                // Run Maven build
+                bat 'echo %JAVA_HOME%'
+                bat 'if not defined JAVA_HOME exit /b 1'  // Ensures JAVA_HOME is set
                 bat 'mvn clean install'
             }
         }
