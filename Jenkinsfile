@@ -7,12 +7,15 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/JamieJay1/docker-spring-boot-java-web-service.git'
+                
+                git branch: 'master', url: 'https://github.com/JamieJay1/docker-spring-boot-java-web-service.git'
             }
         }
         stage('Build') {
             steps {
+                
                 bat 'echo %JAVA_HOME%'        // Correct Windows-style variable
+                // Run Maven build
                 bat 'mvn clean install'
             }
         }
