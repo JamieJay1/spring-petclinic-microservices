@@ -1,21 +1,38 @@
 pipeline {
     agent any
-    tools {
-        jdk 'JDK_17'           
-        maven 'Maven-3.9.9'    
-    }
+
+   tools {
+    jdk 'jdk-21'
+    maven 'maven 3.9.9'
+}
+
+
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/JamieJay1/docker-spring-boot-java-web-service.git', branch: 'main'
+                git credentialsId: 'GitHub_Jay', url: 'https://github.com/JamieJay1/spring-petclinic-microservices.git', branch: 'main'
             }
         }
+
         stage('Build') {
             steps {
-                bat 'echo %JAVA_HOME%'
-                bat 'if not defined JAVA_HOME exit /b 1'  // Ensures JAVA_HOME is set
-                bat 'mvn clean install'
+                sh 'mvn clean package'
             }
+        }
+
+        stage('Test') {
+            steps {
+                sh 'mvn test'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Build and tests completed successfully!'
+        }
+        failure {
+            echo 'Build or tests failed.'
         }
     }
 }
